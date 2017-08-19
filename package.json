@@ -1,0 +1,45 @@
+{
+  "name": "fuzzy-finder",
+  "version": "1.0.0",
+  "description": "Tiny fuzzy searcher (388 bytes gzipped)",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/tiaanduplessis/fuzzy-finder",
+    "type": "git"
+  },
+  "homepage": "https://github.com/tiaanduplessis/fuzzy-finder",
+  "bugs": "https://github.com/tiaanduplessis/fuzzy-finder",
+  "main": "dist/fuzzy-finder.js",
+  "browser": "dist/fuzzy-finder.js",
+  "jsnext:main": "dist/fuzzy-finder.es.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest",
+    "format": "prettier-standard 'src/**/*.js'",
+    "build": "bili --format es --format umd --compress",
+    "start": "npm run test",
+    "precommit": "npm test",
+    "prepublish": "npm run build",
+    "pretest": "npm run format"
+  },
+  "author": "tiaanduplessis <tiaanduplessis@hotmail.com>",
+  "babel": {
+    "presets": [
+      [
+        "env"
+      ]
+    ]
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.6.0",
+    "bili": "^0.17.3",
+    "husky": "^0.14.3",
+    "jest": "^20.0.4",
+    "prettier-standard": "^6.0.0"
+  },
+  "dependencies": {
+    "escape-string-regexp": "^1.0.5"
+  }
+}
