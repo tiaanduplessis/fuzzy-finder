@@ -1,4 +1,7 @@
 
+<div align="center">
+  <img width="60%" src="assets/demo.gif" alt=""/>
+</div>
 <h1 align="center">fuzzy-finder</h1>
 <div align="center">
   <strong>Tiny fuzzy searcher (388 Bytes gzipped)</strong>
@@ -80,6 +83,8 @@ console.log(fuzzy('da', [
 //   { match: 'user-data.js', rank: 5 },
 //   { match: 'dummy-data.txt', rank: 0 } ]
 ```
+
+Check out the example [here](https://codepen.io/tiaan/full/ayYZaM/).
 
 ## Contributing
 
