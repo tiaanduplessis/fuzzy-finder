@@ -58,6 +58,8 @@
 
 ## Install
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tiaanduplessis/fuzzy-finder.svg)](https://greenkeeper.io/)
+
 ```sh
 $ npm install fuzzy-finder
 # OR
