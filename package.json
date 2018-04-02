@@ -1,45 +1,42 @@
 {
   "name": "fuzzy-finder",
   "version": "1.0.1",
-  "description": "Tiny fuzzy searcher (388 bytes gzipped)",
+  "description": "Tiny fuzzy searcher (356 bytes gzipped)",
   "license": "MIT",
+  "main": "dist/fuzzy-finder.js",
+  "umd:main": "dist/fuzzy-finder.umd.js",
+  "module": "dist/fuzzy-finder.m.js",
+  "source": "src/indx.js",
   "repository": {
     "url": "https://github.com/tiaanduplessis/fuzzy-finder",
     "type": "git"
   },
   "homepage": "https://github.com/tiaanduplessis/fuzzy-finder",
   "bugs": "https://github.com/tiaanduplessis/fuzzy-finder",
-  "main": "dist/fuzzy-finder.js",
-  "browser": "dist/fuzzy-finder.js",
-  "jsnext:main": "dist/fuzzy-finder.es.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
-    "test": "jest",
-    "format": "prettier-standard 'src/**/*.js'",
-    "build": "bili --format es --format umd --compress",
+    "test": "npm run lint && jest",
+    "lint": "standard --fix 'src/**/*.js'",
+    "build": "microbundle",
     "start": "npm run test",
     "precommit": "npm test",
-    "prepublish": "npm run build",
-    "pretest": "npm run format"
+    "prepublish": "npm run build"
   },
-  "author": "tiaanduplessis <tiaanduplessis@hotmail.com>",
+  "author": "Tiaan du Plessis",
   "babel": {
-    "presets": [
-      [
-        "env"
-      ]
-    ]
+    "presets": [["env"]]
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.0",
-    "bili": "^3.0.0",
+    "babel-preset-env": "^1.6.1",
     "husky": "^0.14.3",
-    "prettier-standard": "^8.0.0",
-    "jest": "^22.0.0"
+    "jest": "^22.4.3",
+    "microbundle": "^0.4.4",
+    "standard": "^11.0.1"
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5"
+  },
+  "standard": {
+    "ignore": ["dist"]
   }
 }

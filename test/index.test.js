@@ -10,7 +10,7 @@ test('should return no results if none match', () => {
 })
 
 test('should return matches with rank', () => {
-  const result =fuzzyFinder('da', [
+  const result = fuzzyFinder('da', [
     'dota.js',
     'stratures.js',
     'structures.js',
@@ -18,8 +18,8 @@ test('should return matches with rank', () => {
     'user-data.js',
     'dummy-data.txt',
     'other.js'
-])
-const firstMatch = result[0]
+  ])
+  const firstMatch = result[0]
 
   expect(result.length).toBe(4)
   expect(result[0].match).toBeDefined()

@@ -1,24 +1,2 @@
-import escape from 'escape-string-regexp';
-
-var fuzzyFinder = function (str, args) {
-  if ( str === void 0 ) str = '';
-  if ( args === void 0 ) args = [];
-
-  var escaped = escape(str);
-  var regex = new RegExp(((escaped.split('').join('(.*)')) + ".*"));
-  var length = str.length;
-
-  return args.reduce(function (acc, possibleMatch) {
-    var result = regex.exec(possibleMatch);
-
-    if (result) {
-      acc.push({
-        match: possibleMatch,
-        rank: result.index
-      });
-    }
-    return acc
-  }, [])
-};
-
-export default fuzzyFinder;
+var e=/[|\\{}()[\]^$+*?.]/g;export default function(r,n){void 0===r&&(r=""),void 0===n&&(n=[]);var t=function(r){if("string"!=typeof r)throw new TypeError("Expected a string");return r.replace(e,"\\$&")}(r),i=new RegExp(t.split(/(\.|)/).filter(function(e){return e.length}).join("(.*)")+".*");return n.reduce(function(e,r){var n=i.exec(r);return n&&e.push({match:r,rank:n.index}),e},[])};
+//# sourceMappingURL=fuzzy-finder.es.js.map

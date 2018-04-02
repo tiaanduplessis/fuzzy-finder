@@ -2,8 +2,7 @@ import escape from 'escape-string-regexp'
 
 const fuzzyFinder = (str = '', args = []) => {
   const escaped = escape(str)
-  const regex = new RegExp(`${escaped.split('').join('(.*)')}.*`)
-  const length = str.length
+  const regex = new RegExp(`${escaped.split(/(\.|)/).filter(x => x.length).join('(.*)')}.*`)
 
   return args.reduce((acc, possibleMatch) => {
     const result = regex.exec(possibleMatch)
