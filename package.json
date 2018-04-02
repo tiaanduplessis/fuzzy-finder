@@ -1,6 +1,6 @@
 {
   "name": "fuzzy-finder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tiny fuzzy searcher (356 bytes gzipped)",
   "license": "MIT",
   "main": "dist/fuzzy-finder.js",
