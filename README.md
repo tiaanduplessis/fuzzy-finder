@@ -1,6 +1,7 @@
 <div align="center">
   <img width="50%" src="assets/demo.gif" alt=""/>
 </div>
+
 # fuzzy-finder
 
 > Tiny fuzzy searcher (356 Bytes gzipped)
