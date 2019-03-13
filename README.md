@@ -4,7 +4,7 @@
 
 # fuzzy-finder
 
-> Tiny fuzzy searcher (356 Bytes gzipped)
+> Tiny fuzzy searcher (Under 300 bytes gzipped)
 
 [![npm package version](https://img.shields.io/npm/v/fuzzy-finder.svg?style=flat-square)](https://npmjs.org/package/fuzzy-finder)
 [![npm downloads](https://img.shields.io/npm/dm/fuzzy-finder.svg?style=flat-square)](https://npmjs.org/package/fuzzy-finder)
@@ -16,10 +16,12 @@
 
 ## Table of Contents
 
-- [Install](#install)
-- [Usage](#usage)
-- [Contribute](#contribute)
-- [License](#license)
+- [fuzzy-finder](#fuzzy-finder)
+  - [Table of Contents](#table-of-contents)
+  - [Install](#install)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Install
 

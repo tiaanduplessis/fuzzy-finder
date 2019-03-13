@@ -1,2 +1,2 @@
-var e=/[|\\{}()[\]^$+*?.]/g;module.exports=function(r,n){void 0===r&&(r=""),void 0===n&&(n=[]);var t=function(r){if("string"!=typeof r)throw new TypeError("Expected a string");return r.replace(e,"\\$&")}(r),i=new RegExp(t.split(/(\.|)/).filter(function(e){return e.length}).join("(.*)")+".*");return n.reduce(function(e,r){var n=i.exec(r);return n&&e.push({match:r,rank:n.index}),e},[])};
+var e,r=(e=require("escape-string-regexp"))&&"object"==typeof e&&"default"in e?e.default:e;module.exports=function(e,n){void 0===e&&(e=""),void 0===n&&(n=[]);var t=r(e),i=new RegExp(t.split(/(\.|)/).filter(function(e){return e.length}).join("(.*)")+".*");return n.reduce(function(e,r){var n=i.exec(r);return n&&e.push({match:r,rank:n.index}),e},[])};
 //# sourceMappingURL=fuzzy-finder.js.map
