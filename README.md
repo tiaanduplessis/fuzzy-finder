@@ -31,6 +31,12 @@ $ npm install fuzzy-finder
 $ yarn add fuzzy-finder
 ```
 
+Or with CDN:
+
+```html
+<script src="https://unpkg.com/fuzzy-finder@1.0.4/dist/fuzzy-finder.umd.js"></script>
+```
+
 ## Usage
 
 ```js
