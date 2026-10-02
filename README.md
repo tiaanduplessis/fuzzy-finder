@@ -59,6 +59,19 @@ console.log(fuzzy('da', [
 
 Check out the example [here](https://codepen.io/tiaan/full/ayYZaM/).
 
+Queries are literal, case-sensitive subsequences. Punctuation such as `.`, `+`,
+`[` and `\` is matched as text, not as regular-expression syntax:
+
+```js
+fuzzyFinder('a.b', ['ab', 'acb', 'xa--.--b', 'a.b'])
+// [ { match: 'xa--.--b', rank: 1 }, { match: 'a.b', rank: 0 } ]
+```
+
+Results retain candidate order, including duplicates. `rank` is the zero-based
+UTF-16 offset of the first matched character. Query characters can have gaps
+between them, but those gaps do not cross line breaks. An empty query matches
+every candidate at rank `0`.
+
 ## Development
 
 Use Node.js 22.13+ or 24 LTS to work on this repository. The published CommonJS,

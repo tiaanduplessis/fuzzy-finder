@@ -70,18 +70,94 @@ function characterize (name, fuzzyFinder, register = test) {
   })
 
   check(`${name}: retains existing invalid-input errors`, () => {
-    for (const query of [null, 123, {}, []]) {
-      assert.throws(() => fuzzyFinder(query, []), { name: 'TypeError' })
+    for (const query of [null, 123, true, {}, [], new String('ab'), Symbol('ab'), 1n]) {
+      assert.throws(() => fuzzyFinder(query, []), {
+        name: 'TypeError', message: 'Expected a string'
+      })
     }
+    assert.throws(() => fuzzyFinder({ split: () => ['a'] }, ['a']), {
+      name: 'TypeError', message: 'Expected a string'
+    })
     assert.throws(() => fuzzyFinder('a', null), { name: 'TypeError' })
     assert.throws(() => fuzzyFinder('a', {}), { name: 'TypeError' })
   })
 
-  check(`${name}: characterizes existing escaped-punctuation errors`, () => {
-    // These are pre-existing errors in 1.0.4, not newly supported query syntax.
-    // Keep the tooling refresh separate from a future escaping bug fix.
-    for (const query of ['.', '*', '+', '?', '^', '$', '{', '}', '(', ')', '|', '[', ']', '\\', 'a.b', 'a\\b']) {
-      assert.throws(() => fuzzyFinder(query, [query]), { name: 'SyntaxError' }, query)
+  check(`${name}: matches regex punctuation literally without throwing`, () => {
+    // 1.0.4 split already-escaped queries and threw for escaped punctuation.
+    // Escape individual UTF-16 units so regex syntax remains literal.
+    for (const query of ['.', '*', '+', '?', '^', '$', '{', '}', '(', ')', '|', '[', ']', '\\', '-', '/']) {
+      assert.deepEqual(fuzzyFinder(query, ['', 'abc', `xx${query}`, query]), [
+        { match: `xx${query}`, rank: 2 }, { match: query, rank: 0 }
+      ], query)
+      assert.deepEqual(fuzzyFinder(query, []), [], query)
+    }
+  })
+
+  check(`${name}: allows gaps around literal punctuation and preserves ranks`, () => {
+    assert.deepEqual(fuzzyFinder('a.b', ['ab', 'acb', 'xa--.--b', 'a.b', 'b.a']), [
+      { match: 'xa--.--b', rank: 1 }, { match: 'a.b', rank: 0 }
+    ])
+    assert.deepEqual(fuzzyFinder('a+b', ['ab', 'aaab', 'a+++b', 'xa+xb']), [
+      { match: 'a+++b', rank: 0 }, { match: 'xa+xb', rank: 1 }
+    ])
+    assert.deepEqual(fuzzyFinder('[ab]', ['a', 'b', 'ab', '[ab]', 'x[a--b]']), [
+      { match: '[ab]', rank: 0 }, { match: 'x[a--b]', rank: 1 }
+    ])
+    assert.deepEqual(fuzzyFinder('\\d', ['123', 'd', '\\d', 'x\\--d']), [
+      { match: '\\d', rank: 0 }, { match: 'x\\--d', rank: 1 }
+    ])
+    assert.deepEqual(fuzzyFinder('a\\b', ['ab', 'a\\b', 'xa--\\--b']), [
+      { match: 'a\\b', rank: 0 }, { match: 'xa--\\--b', rank: 1 }
+    ])
+  })
+
+  check(`${name}: keeps repeated and adjacent regex syntax literal`, () => {
+    for (const query of ['..', '++', '**', '??', '[]', '()', '{}', '^$', 'a|b', '\\\\', '\\.', '.*', '(a+)+$', '[a-z]', '\\1']) {
+      assert.deepEqual(fuzzyFinder(query, [query, `xx${query}`, '', 'abc', '123']), [
+        { match: query, rank: 0 }, { match: `xx${query}`, rank: 2 }
+      ], query)
+    }
+  })
+
+  check(`${name}: preserves UTF-16 units and line breaks for literal queries`, () => {
+    assert.deepEqual(fuzzyFinder('🙂.', ['x🙂.', '🙂x.', '🙂', '\ud83dx\ude42.']), [
+      { match: 'x🙂.', rank: 1 }, { match: '🙂x.', rank: 0 },
+      { match: '\ud83dx\ude42.', rank: 0 }
+    ])
+    assert.deepEqual(fuzzyFinder('a.', ['a\n.', 'a\r.', 'a\u2028.', 'a\u2029.', '\na.']), [
+      { match: '\na.', rank: 1 }
+    ])
+    assert.deepEqual(fuzzyFinder('\n.', ['x\n.', '\n']), [{ match: 'x\n.', rank: 1 }])
+    assert.deepEqual(fuzzyFinder('\u0000.', ['x\u0000.', '.']), [{ match: 'x\u0000.', rank: 1 }])
+  })
+
+  check(`${name}: agrees with literal subsequences across short mixed queries`, () => {
+    const alphabet = ['a', '.', '+', '[', '\\', '🙂']
+    const words = ['']
+    let previous = ['']
+    for (let length = 1; length <= 3; length++) {
+      previous = previous.flatMap(prefix => alphabet.map(letter => prefix + letter))
+      words.push(...previous)
+    }
+    const candidates = [...words].reverse()
+    for (const query of words.slice(0, 43)) {
+      const expected = []
+      for (const candidate of candidates) {
+        let rank = 0
+        let after = 0
+        let matched = true
+        for (let index = 0; index < query.length; index++) {
+          const found = candidate.indexOf(query[index], after)
+          if (found === -1) {
+            matched = false
+            break
+          }
+          if (index === 0) rank = found
+          after = found + 1
+        }
+        if (matched) expected.push({ match: candidate, rank })
+      }
+      assert.deepEqual(fuzzyFinder(query, candidates), expected, query)
     }
   })
   return Promise.all(pending)
