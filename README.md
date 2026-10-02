@@ -4,11 +4,11 @@
 
 # fuzzy-finder
 
-> Tiny fuzzy searcher (Under 300 bytes gzipped)
+> Tiny fuzzy searcher
 
 [![npm package version](https://img.shields.io/npm/v/fuzzy-finder.svg?style=flat-square)](https://npmjs.org/package/fuzzy-finder)
 [![npm downloads](https://img.shields.io/npm/dm/fuzzy-finder.svg?style=flat-square)](https://npmjs.org/package/fuzzy-finder)
-[![standard JS linter](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+[![ESLint](https://img.shields.io/badge/lint-ESLint-brightgreen.svg?style=flat-square)](https://eslint.org/)
 [![travis ci build status](https://img.shields.io/travis/tiaanduplessis/fuzzy-finder.svg?style=flat-square)](https://travis-ci.org/tiaanduplessis/fuzzy-finder)
 [![project license](https://img.shields.io/npm/l/fuzzy-finder.svg?style=flat-square)](https://github.com/tiaanduplessis/fuzzy-finder/blob/master/LICENSE)
 [![make a pull request](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -58,6 +58,51 @@ console.log(fuzzy('da', [
 ```
 
 Check out the example [here](https://codepen.io/tiaan/full/ayYZaM/).
+
+## Development
+
+Use Node.js 22.13+ or 24 LTS to work on this repository. The published CommonJS,
+ES module and UMD entry points and the runtime dependency remain unchanged.
+
+```sh
+npm ci --ignore-scripts
+npm test
+```
+
+ESLint with ESLint Stylistic retains the two-space, single-quote, no-semicolon
+style.
+
+`npm test` checks formatting without changing files, rebuilds every distribution
+format, and runs the Node.js test runner. `npm run build` generates the three
+minified files and source maps in `dist`. Commit those generated files with source
+changes. There are no TypeScript sources or declarations to type-check.
+
+Installation does not install Git hooks or trigger a build. `prepack` builds the
+package when a maintainer explicitly packs it; no release or publishing automation
+is configured by this project.
+
+Both lockfiles are retained. `package-lock.json` is the canonical npm lockfile;
+`yarn.lock` supports Yarn Classic 1.22.22 users. Update both together, inspect the
+resolved graph with scripts disabled, and verify a clean install using each:
+
+```sh
+npm ci --ignore-scripts
+npm test
+yarn install --frozen-lockfile --ignore-scripts
+yarn test
+```
+
+Do not use an unfrozen install as a substitute for these checks. Run the Yarn
+check in a separate clean checkout so npm and Yarn do not share `node_modules`.
+
+npm 10/11 may rewrite the sibling `yarn.lock` during `npm ci`, dropping optional
+packages for other platforms even though `package-lock.json` is unchanged. Do
+not commit that incidental Yarn rewrite. Retain the full committed Yarn lock for
+cross-platform installs. For dependency updates, generate the npm lock first,
+copy it and `package.json` to a temporary directory, convert the copy with
+`npm install --package-lock-only --lockfile-version=1 --ignore-scripts`, and use
+`yarn import --ignore-scripts` there. Bring back only the resulting `yarn.lock`
+and compare package versions/integrities across both locks before testing.
 
 ## Contributing
 
